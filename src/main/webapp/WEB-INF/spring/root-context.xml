@@ -23,6 +23,6 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
-	<mybatis-spring:scan base-package="www.study.com.orm.simple.mapper"/>
+	<mybatis-spring:scan base-package="www.study.com.orm.party.mapper"/>
 		
 </beans>

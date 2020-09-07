@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.study.com.orm.party.mapper.PartyMapper">
+	<resultMap id="partyResultMap"
+		type="www.study.com.orm.party.model.PartyVO">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="birthDate" column="birth_date" />
+		<collection property="listContactPoint"
+			ofType="www.study.com.orm.party.model.ContactPointVO">
+			<id property="typeName" column="type_name" />
+			<result property="contactPoint" column="contact_point" />
+		</collection>
+		<collection property="listHashTag" columnPrefix="ht_"
+			resultMap="hashTagResultMap">
+		</collection>
+		<discriminator javaType="String" column="party_type">
+			<case value="PERSON" resultMap="personResultMap" />
+			<case value="ORGANIZATION" resultMap="organizationResultMap" />
+		</discriminator>
+	</resultMap>
+	
+	<resultMap id="personResultMap"
+		type="www.study.com.orm.party.model.PersonVO" extends="partyResultMap">
+		<result property="gender" column="gender" />
+	</resultMap>
+	
+	<resultMap id="organizationResultMap"
+		type="www.study.com.orm.party.model.OrganizationVO" extends="partyResultMap">
+		<result property="salesTot" column="sales_tot" />
+	</resultMap>
+
+	<resultMap id="hashTagResultMap"
+		type="www.study.com.orm.party.model.HashTagVO">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<select id="getAll" resultMap="partyResultMap">
+		select * from t_party
+	</select>
+
+	<select id="getAllWithContactPoint" resultMap="partyResultMap">
+		select * from
+		t_party p, t_contact_point cp
+		where p.id = cp.id
+	</select>
+
+	<select id="getAllWithContactPointWithoutLoss"
+		resultMap="partyResultMap">
+		select * from
+		t_party p left outer join t_contact_point cp on
+		p.id = cp.id
+	</select>
+
+	<select
+		id="getAllWithContactPointWithoutLossdAndPersonalService"
+		resultMap="partyResultMap">
+		select p.*, cp.*, t.id ht_id, t.name ht_name from
+		t_party p
+		left outer join t_contact_point cp on p.id = cp.id
+		left outer join m_party_hash_tag mt on p.id = mt.party_id
+		left outer join t_hash_tag t on mt.tag_id = t.id
+	</select>
+
+	<select id="getAllPerson" resultMap="partyResultMap">
+		select * from t_party
+		where
+		party_type = 'PERSON'
+	</select>
+</mapper>
