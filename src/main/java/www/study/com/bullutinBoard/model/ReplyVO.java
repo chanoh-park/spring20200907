@@ -1,18 +1,40 @@
 package www.study.com.bullutinBoard.model;
 
-import java.util.List;
-
-import lombok.Data;
+import lombok.NoArgsConstructor;
 import www.study.com.party.model.PartyVO;
 
-@Data
+@NoArgsConstructor
 public class ReplyVO {
-	private int id;
+	private static final char HID_DELI = '-';
+	private String hierarchyId;
 	private PartyVO writer;
 	private String content;
+	private ReplyVO parent;
 
+	public ReplyVO(ReplyVO parent, PartyVO writer, String content) {
+		this.parent = parent;
+		this.writer = writer;
+		this.content = content;
+	}
+	
+	public char getHidDeli() {
+		return HID_DELI;
+	}
+	
+	public PartyVO getWriter() {
+		return writer;
+	}
+
+	public ReplyVO getParent() {
+		return parent;
+	}
+
+	public void setHierarchyId(String hierarchyId) {
+		this.hierarchyId = hierarchyId;
+	}
+	
 	@Override
 	public String toString() {
-		return "ReplyVO [id=" + id + ", writer=" + writer + ", content=" + content + "]";
+		return "ReplyVO [hierarchyId=" + hierarchyId + ", writer=" + writer + ", content=" + content + "]";
 	}
 }

@@ -3,10 +3,10 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="www.study.com.party.mapper.PartyMapper">
+  
+<!-- association : 1:N에서 N쪽의 정보를 조회할 때 1쪽의 정보도 함께 읽을 것임 -->
 
-	<!-- association : 1:N에서 N쪽의 정보를 조회할 때 1쪽의 정보도 함께 읽을 것임 -->
-	
+<mapper namespace="www.study.com.party.mapper.PartyMapper">
 	<resultMap id="partyResultMap"
 		type="www.study.com.party.model.PartyVO">
 		<id property="id" column="id" />
@@ -20,6 +20,7 @@
 		<collection property="listHashTag" columnPrefix="ht_"
 			resultMap="hashTagResultMap">
 		</collection>
+		<!-- 구분자 -->
 		<discriminator javaType="String" column="party_type">
 			<case value="PERSON" resultMap="personResultMap" />
 			<case value="ORGANIZATION" resultMap="organizationResultMap" />
@@ -55,8 +56,7 @@
 	<select id="getAllWithContactPointWithoutLoss"
 		resultMap="partyResultMap">
 		select * from
-		t_party p left outer join t_contact_point cp on
-		p.id = cp.id
+		t_party p left outer join t_contact_point cp on p.id = cp.id
 	</select>
 
 	<select
@@ -71,7 +71,28 @@
 
 	<select id="getAllPerson" resultMap="partyResultMap">
 		select * from t_party
-		where
-		party_type = 'PERSON'
+		where party_type = 'PERSON'
 	</select>
+	
+	<insert id="insertPerson">
+		<selectKey keyProperty="id" order="BEFORE" resultType="int">
+			select seq4party.nextval from dual
+		</selectKey>
+		insert into t_party (id, name, birth_date, party_type, gender) values (#{id}, #{name}, #{birthDate}, 'PERSON', #{gender})
+	</insert>
+	
+	<!-- 한 사람에 대한 연락처가 10개 만들어 진다면 10번 돌아간다 : 결론은 느려터짐! 성능 나쁨! -->
+	<insert id="insertContactPoint">
+		insert into t_contact_point(id, type_name, contact_point)
+			values(#{partyId}, #{typeName}, #{contactPoint})
+	</insert>
+	
+	<insert id="insertContactPointByOneshot">
+		INSERT ALL
+		<foreach item="cp" collection="listcp" separator=" ">
+			INTO t_contact_point(id, type_name, contact_point)
+			values(#{cp.partyId}, #{cp.typeName}, #{cp.contactPoint})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
 </mapper>

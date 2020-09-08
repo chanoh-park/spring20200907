@@ -1,6 +1,9 @@
-create sequence seq4hash_tag;
+create sequence seq4party;
+drop sequence seq4party;
 
+create sequence seq4hash_tag;
 drop sequence seq4hash_tag;
+
 drop table m_party_hash_tag;
 drop table t_hash_tag;
 drop table t_contact_point;
@@ -82,6 +85,13 @@ insert into m_party_hash_tag(party_id, tag_id)
 	select -10000001, id from t_hash_tag
 	where name = '서비스';
 	
+
+
+
+
+
+
+
 
 -- id, name, birth_date
 create table t_simple (

@@ -2,7 +2,11 @@ package www.study.com.party.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import www.study.com.party.model.ContactPointVO;
 import www.study.com.party.model.PartyVO;
+import www.study.com.party.model.PersonVO;
 
 public interface PartyMapper {
 	public List<PartyVO> getAll();
@@ -14,4 +18,10 @@ public interface PartyMapper {
 	public List<PartyVO> getAllWithContactPointWithoutLossdAndPersonalService();
 	
 	public List<PartyVO> getAllPerson();
+	
+	public int insertPerson(PersonVO obj);
+	//public int insertOrganizatio(OrganizationVO obj);
+
+	// 여러 건을 한번 DB insert all 문장으로 처리하여 -> 성능 향상
+	public void insertContactPointByOneshot(@Param("listcp") List<ContactPointVO> listcp);
 }
