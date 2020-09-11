@@ -37,6 +37,7 @@
 		select p.*, m.id m_id, m.name m_name, m.birth_date m_birth_date, m.party_type m_party_type, m.gender m_gender, m.sales_tot m_sales_tot
 		from t_post p
 		left outer join t_party m on p.writer_id = m.id
+		where p.post_type = 'POST'
 	</select>
 	
 	<!-- Composite Pattern에 따른 개발 방법 -->
@@ -45,6 +46,38 @@
 		from t_post p
 			left outer join t_party m on p.writer_id = m.id
 		where hierarchy_id like '1%'
+	</select>
+	
+	<select id="countTotalPost" resultType="int">
+		<![CDATA[
+				select count(*)
+				  from t_post p
+				 where p.post_type = 'POST'
+		]]>
+	</select>
+	
+	<select id="getPostByPaging" resultMap="replyResultMap">
+		<![CDATA[
+		select p.*, m.id m_id, m.name m_name, m.birth_date m_birth_date, m.party_type m_party_type, m.gender m_gender, m.sales_tot m_sales_tot
+		  from (
+			select *
+			  from (
+				select rownum rn, p.*
+				  from t_post p
+				 where p.post_type = 'POST'
+				   and rownum <= #{pageNo} * #{amount}
+				   ) p
+			 where rn > (#{pageNo} - 1) * #{amount}
+			   ) p
+		       left outer join t_party m on p.writer_id = m.id
+		]]>
+	</select>
+	
+	<select id="findById" resultMap="replyResultMap">
+		select p.*, m.id m_id, m.name m_name, m.party_type m_party_type
+		from t_post p
+			left outer join t_party m on p.writer_id = m.id
+		where hierarchy_id = #{hierarchyId}
 	</select>
 	
 	<insert id="insertPost">
@@ -62,5 +95,17 @@
 		insert into t_post(hierarchy_id, writer_id, content)
 			values(#{hierarchyId}, #{writer.id}, #{content})
 	</insert>
+	
+	<update id="updatePost">
+		update t_post
+		   set content = #{content},
+		       title = #{title}
+		 where hierarchy_id = #{hierarchyId}
+	</update>
+	
+	<delete id="removePost">
+		delete from t_post
+		 where hierarchy_id = #{hierarchyId}
+	</delete>
 
 </mapper>

@@ -7,9 +7,15 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/*
+ * POJO plain(순전한) old java object
+ * Default Constructor 필수 있어야합니다.
+ * get~, set~ 함수가 있어야 함
+ */
+
 @Data
 @NoArgsConstructor
-public abstract class PartyVO {
+public class PartyVO {
 	private int id;
 	private String name;
 	private Date birthDate;

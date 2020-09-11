@@ -1,8 +1,10 @@
 package www.study.com.bullutinBoard.model;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import www.study.com.party.model.PartyVO;
 
+@Data
 @NoArgsConstructor
 public class PostVO extends ReplyVO {
 	private String title;
@@ -18,4 +20,5 @@ public class PostVO extends ReplyVO {
 	public String toString() {
 		return "PostVO [title=" + title + ", board=" + board + "]";
 	}
+
 }

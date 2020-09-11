@@ -1,13 +1,18 @@
 package www.study.com.bullutinBoard.model;
 
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import www.study.com.party.model.PartyVO;
 
+@Data
 @NoArgsConstructor
 public class ReplyVO {
 	private static final char HID_DELI = '-';
+	@Getter
 	private String hierarchyId;
 	private PartyVO writer;
+	@Getter
 	private String content;
 	private ReplyVO parent;
 
@@ -31,6 +36,10 @@ public class ReplyVO {
 
 	public void setHierarchyId(String hierarchyId) {
 		this.hierarchyId = hierarchyId;
+	}
+	
+	protected String toSimpleString() {
+		return "hierarchyId="+hierarchyId;
 	}
 	
 	@Override
