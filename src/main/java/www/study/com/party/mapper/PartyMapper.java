@@ -15,7 +15,7 @@ public interface PartyMapper {
 
 	public List<PartyVO> getAllWithContactPointWithoutLoss();
 	
-	public List<PartyVO> getAllWithContactPointWithoutLossdAndPersonalService();
+	public List<PartyVO> getAllWithContactPointWithoutLossAndPersonalService();
 	
 	public List<PartyVO> getAllPerson();
 	

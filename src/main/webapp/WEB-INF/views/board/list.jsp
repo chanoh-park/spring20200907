@@ -20,6 +20,22 @@
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
 			<h6 class="m-0 font-weight-bold text-primary">게시글 목록 페이지</h6>
+			<!-- pagination 처리 시에는 검색 조건에 대한 변화가 없어야합니다. 이에 기억하고 있다가 재요청하는 스타일로 개발합니다. 
+				검색 이후 검색 문자열 변경하고 페이지를 누른다면 검색 문자열 변경 이전으로 지속되어야 합니다. -->
+			<form id='actionForm' action='/board/list' method='get'>
+				<select name="type">
+					<option value="" ${pageMaker.type == null ? "selected" : ""}>---</option>
+					<option value="T" ${pageMaker.type eq "T" ? "selected" : ""}>제목</option>
+					<option value="C" ${pageMaker.type eq "C" ? "selected" : ""}>내용</option>
+					<option value="TC" ${pageMaker.type eq "TC" ? "selected" : ""}>제목 또는 내용</option>
+				</select>
+				<input type="text" name='keyword' value='${pageMaker.keyword}'>
+				<button class="btn btn-default" >검색</button>
+				 
+				<input type="hidden" name='pageNo' value='${pageMaker.pageNo}'> 
+				<input type="hidden" name='amount' value='${pageMaker.amount}'>
+			</form>
+			
 			<button class='btn btn-xs pull-right' id="btnInsertPostPage" type='button'>글 쓰기</button>
 		</div>
 		<div class="card-body">
@@ -62,12 +78,6 @@
 							</li>
 						</c:if>
 					</ul>
-					<!-- pagination 처리 시에는 검색 조건에 대한 변화가 없어야합니다. 이에 기억하고 있다가 재요청하는 스타일로 개발합니다. 
-						검색 이후 검색 문자열 변경하고 페이지를 누른다면 검색 문자열 변경 이전으로 지속되어야 합니다. -->
-					<form id='actionForm' action='/board/list' method='get'>
-						<input type="hidden" name='pageNo' value='${pageMaker.pageNo}'> 
-						<input type="hidden" name='amount' value='${pageMaker.amount}'>
-					</form>
 					
 				</div> <!-- Page Jump 용 anchor -->
 				
@@ -127,6 +137,7 @@ $(document).ready(function() {
 
 	var actionForm = $("#actionForm");
 	
+	//페이지로 이동
 	$(".pagination a").on('click', function(e) {
 		e.preventDefault();
 		pageNo = actionForm.find("input[name='pageNo']");
@@ -135,12 +146,31 @@ $(document).ready(function() {
 		actionForm.submit();
 	});
 	
+	//게시글 상세로 전환
 	$(".jumpDetail").on('click', function(e) {
 		e.preventDefault();
 		
 		hierarchyId = $(this).attr('href');
 		actionForm.append("<input type='hidden' name='hierarchyId' value='" + hierarchyId + "'>");
 		actionForm.attr('action', "/board/findPostById");
+		actionForm.submit();
+	});
+	
+	//검색
+	$("#actionForm button").on('click', function(e) {
+		e.preventDefault();
+		//선택이 없으면
+		if (!actionForm.find("option:selected").val()) {
+			alert('검색 종류를 선택하세요!');
+			return false;
+		}
+		if (!actionForm.find("input[name='keyword']").val()) {
+			alert('검색어를 입력하세요!');
+			return false;
+		}
+		//새로운 검색하면 1쪽 보여줍니다
+		actionForm.find("input[name='pageNo']").val('1');
+		
 		actionForm.submit();
 	});
 });

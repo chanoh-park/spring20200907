@@ -1,7 +1,5 @@
 package www.study.com.party.mapper;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 import java.util.List;
 
@@ -11,82 +9,92 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import lombok.Setter;
-import lombok.extern.log4j.Log4j;
+import www.study.com.bullutinBoard.model.ReplyVO;
 import www.study.com.party.mapper.PartyMapper;
 import www.study.com.party.model.ContactPointVO;
 import www.study.com.party.model.HashTagVO;
 import www.study.com.party.model.PartyVO;
 import www.study.com.party.model.PersonVO;
+import www.study.com.party.model.PersonVO.Gender;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
-@Log4j
 public class PartyMapperTest {
-
-	@Setter(onMethod_ = @Autowired)
+	@Autowired
 	private PartyMapper mapper;
-	
-	//@Test
+
+	@Test
 	public void testGetAll() {
-		System.out.println("getAll()");
-		List<PartyVO> listParty = mapper.getAll();
-		
-		for (PartyVO party : listParty) {
-			System.out.println(party);
+		try {
+			System.out.println("testGetAll()");
+			List<PartyVO> listSimple = mapper.getAll();
+			for (PartyVO simple : listSimple) {
+				System.out.println(simple);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	//@Test
+
+	@Test
 	public void testGetAllWithContactPoint() {
-		System.out.println("getAllWithContactPoint()");
-		List<PartyVO> listParty = mapper.getAllWithContactPoint();
-		
-		for (PartyVO party : listParty) {
-			System.out.println(party);
-			for (ContactPointVO cp : party.getListContactPoint()) {
-				System.out.println(cp);
+		try {
+			System.out.println("testGetAllWithContactPoint()");
+			List<PartyVO> listSimple = mapper.getAllWithContactPoint();
+			for (PartyVO simple : listSimple) {
+				System.out.println(simple);
+				for (ContactPointVO cp : simple.getListContactPoint()) {
+					System.out.println(cp);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	//@Test
+
+	@Test
 	public void testGetAllWithContactPointWithoutLoss() {
-		System.out.println("getAllWithContactPointWithoutLoss()");
-		List<PartyVO> listParty = mapper.getAllWithContactPointWithoutLoss();
-		
-		for (PartyVO party : listParty) {
-			System.out.println(party);
-			for (ContactPointVO cp : party.getListContactPoint()) {
-				System.out.println(cp);
+		try {
+			System.out.println("testGetAllWithContactPointWithoutLoss()");
+			List<PartyVO> listSimple = mapper.getAllWithContactPointWithoutLoss();
+			for (PartyVO simple : listSimple) {
+				System.out.println(simple);
+				for (ContactPointVO cp : simple.getListContactPoint()) {
+					System.out.println(cp);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	//@Test
-	public void testGetAllWithContactPointWithoutLossdAndPersonalService() {
-		System.out.println("getAllWithContactPointWithoutLossdAndPersonalService()");
-		List<PartyVO> listParty = mapper.getAllWithContactPointWithoutLossdAndPersonalService();
-		
-		for (PartyVO party : listParty) {
-			System.out.println(party);
-			for (HashTagVO tag : party.getlistHashTag()) {
-				System.out.println(tag);
+
+	@Test
+	public void testGetAllWithContactPointWithoutLossAndPersonalService() {
+		try {
+			System.out.println("testGetAllWithContactPointWithoutLossAndPersonalService()");
+			List<PartyVO> listSimple = mapper.getAllWithContactPointWithoutLossAndPersonalService();
+			for (PartyVO simple : listSimple) {
+				System.out.println(simple);
+				for (HashTagVO tag : simple.getListHashTag()) {
+					System.out.println(tag);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testInsertPerson() {
 		try {
-			System.out.println("testInsertPerson()");
+			System.out.println("\ntestInsertPerson()");
 			PersonVO obj = new PersonVO("허균", new Date(), PersonVO.Gender.mail);
 			mapper.insertPerson(obj);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testInsertPersonHavingContactPoint() {
 		try {
@@ -105,4 +113,5 @@ public class PartyMapperTest {
 			e.printStackTrace();
 		}
 	}
+	
 }

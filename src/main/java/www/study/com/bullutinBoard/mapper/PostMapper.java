@@ -21,7 +21,7 @@ public interface PostMapper {
 	
 	public void removePost(PostVO post);
 	
-	public int countTotalPost();
+	public int countTotalPost(Criteria criteria);
 
 	public List<ReplyVO> getPostByPaging(Criteria criteria);
 }

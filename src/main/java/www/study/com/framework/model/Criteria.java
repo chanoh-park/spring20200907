@@ -6,8 +6,8 @@ import lombok.Data;
 public class Criteria {
 	//Page navigation button을 총 몇개로 설정할지...
 	private static final float PAGING_BTN_CNT = 10;
-	private int pageNo;
-	private int amount;
+	protected int pageNo;
+	protected int amount;
 	
 	private int startPage, endPage, total;
 	private boolean prev, next;
@@ -19,6 +19,13 @@ public class Criteria {
 	public Criteria(int pageNo, int amount) {
 		this.pageNo = pageNo;
 		this.amount = amount;
+	}
+
+	public Criteria(Criteria other, int tot) {
+		this.pageNo = other.pageNo;
+		this.amount = other.amount;
+		
+		calc(tot);
 	}
 
 	public Criteria(int pageNo, int amount, int tot) {

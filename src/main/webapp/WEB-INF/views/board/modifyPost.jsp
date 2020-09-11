@@ -31,8 +31,7 @@
 					<button type="submit" data-oper='remove' class="btn btn-danger">글삭제</button>
 					<button type="submit" id='btnList' class="btn btn-info">글 목록</button>
 
-					<input type="hidden" name='pageNo' value='${cri.pageNo}'> 
-					<input type="hidden" name='amount' value='${cri.amount}'>
+					${cri.makeHiddenHTMLTags()}
 				</form>
 			</div>
 			<!-- /.panel -->
@@ -48,31 +47,38 @@
 		// ./includes/PostInfo.jsp에 정의된 함수입니다.
 		setOperMode("updateMode");
 
-		var formObj = $("#postInfoForm");
-
+		var postInfoForm = $("#postInfoForm");
+		
+		//사용자의 정보 수정을 완료하고 이를 저장처리 요청합니다.
 		$('#btnModify').on("click", function(e) {
 			e.preventDefault();
-			formObj.submit();
+			postInfoForm.submit();
 		});
 		
+		//수정 취소하고 목록으로 돌아갑니다.
 		$('#btnList').on("click", function(e) {
 			e.preventDefault();
-			formObj.attr('action', "/board/list").attr("method", "get");
+			postInfoForm.attr('action', "/board/list").attr("method", "get");
 			
 			//요청 정보 최소화를 통하여 성능 손해 없도록
-			pageNo = $("<input [name='pageNo']").clone(); 
-			amount = $("<input [name='amount']").clone(); 
-			formObj.empty();
-			formObj.append(pageNo);
-			formObj.append(amount);
+			//input[name  이 사이에 공백을 넣으면(input   [name) 오작동. 
+			pageNo = $("input[name='pageNo']").clone();
+			amount = $("input[name='amount']").clone();
+			type = $("input[name='type']").clone();
+			keyword = $("input[name='keyword']").clone();
+			postInfoForm.empty();
+			postInfoForm.append(pageNo);
+			postInfoForm.append(amount);
+			postInfoForm.append(type);
+			postInfoForm.append(keyword);
 			
-			formObj.submit();
+			postInfoForm.submit();
 		});
-		
+		//삭제처리합니다.
 		$('button[data-oper="remove"]').on('click', function(e){
 			e.preventDefault();
-			formObj.attr('action', "/board/remove");
-			formObj.submit();
+			postInfoForm.attr('action', "/board/remove");
+			postInfoForm.submit();
 		});
 	});
 </script>

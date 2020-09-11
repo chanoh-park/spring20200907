@@ -26,7 +26,7 @@ public class PostService {
 	}
 	
 	public Pair<List<ReplyVO>, Integer> getPostByPaging(Criteria criteria) {
-		return new Pair<>(mapper.getPostByPaging(criteria), mapper.countTotalPost());
+		return new Pair<>(mapper.getPostByPaging(criteria), mapper.countTotalPost(criteria));
 	}
 
 	public int insertPost(PostVO obj) {
